@@ -33,6 +33,7 @@ import 'abbreviations_model.dart';
 import 'sequence_frame.dart';
 import 'sequencer_animation_frame.dart';
 import 'sequencer_calls_page.dart';
+import 'freeplay_directions_frame.dart';
 import 'sequencer_model.dart';
 
 class SequencerTestPage extends fm.StatefulWidget {
@@ -161,6 +162,8 @@ class _SequencerPageState extends fm.State<SequencerPage> {
                           builder: (context,tamState,_) {
                             if (tamState.detailPage == DetailPage.CALLS)
                               return SequencerCallsFrame();
+                            else if (tamState.detailPage == DetailPage.FREEPLAY)
+                              return FreeplayDirectionsFrame();
                             else if (tamState.detailPage == DetailPage.ABBREVIATIONS)
                               return AbbreviationsFrame();
                             else if (tamState.detailPage == DetailPage.SETTINGS)

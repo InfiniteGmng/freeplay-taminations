@@ -42,7 +42,8 @@ class SequencerAnimationFrame extends fm.StatelessWidget {
               _SequencerSettingsButton(),
               _SequencerAbbrevButton(),
               _SequencerCallsButton(),
-              CopyImageButton()  // from animation_page
+              CopyImageButton(),  // from animation_page
+              SequencerFreeplayButton()
             ]
           )
         )
@@ -76,7 +77,8 @@ class PortraitSequencerAnimationFrame extends fm.StatelessWidget {
                   _SequencerHelpButton(),
                   _SequencerSettingsButton(),
                   _SequencerAbbrevButton(),
-                  _SequencerCallsButton()]
+                  _SequencerCallsButton(),
+                  SequencerFreeplayButton()]
                 ]
               ); }
             ),
@@ -156,9 +158,32 @@ class _SequencerCallsButton extends fm.StatelessWidget {
     final appState = pp.Provider.of<TamState>(context,listen: false);
     return fm.Expanded(
         child: Button('Calls',onPressed: () {
-          appState.change(detailPage:DetailPage.CALLS);
+          appState.change(
+              freeplay: false,
+              grid: false,
+              detailPage: DetailPage.CALLS
+          );
         },)
     );
   }
 }
 
+class SequencerFreeplayButton extends fm.StatelessWidget {
+  @override
+  fm.Widget build(fm.BuildContext context) {
+    final appState = pp.Provider.of<TamState>(context,listen: false);
+    return fm.Expanded(
+        child: Button('Freeplay',onPressed: () {
+          if (appState.detailPage != DetailPage.FREEPLAY) {
+            appState.change(
+                freeplay: true,
+                grid: true,
+                detailPage: DetailPage.FREEPLAY
+            );
+            final model = pp.Provider.of<SequencerModel>(context,listen: false);
+            model.reset(); // Snap back to starting formation for freeplay
+          }
+        },)
+    );
+  }
+}

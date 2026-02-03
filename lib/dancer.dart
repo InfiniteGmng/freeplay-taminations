@@ -198,6 +198,23 @@ class Dancer implements Comparable<Dancer>, Cloneable<Dancer> {
   static const NUMBERS_NAMES = 3;   //  sequencer only
   static const NUMBER_HEIGHT = 8.0;
 
+  static const rect = fm.Rect.fromLTWH(-0.5, -0.5, 1.0, 1.0);
+  static var rrect = fm.RRect.fromRectAndRadius(rect,
+      fm.Radius.circular(0.3));
+  Geometry geometry;
+  Color fillColor;  //  Passed into default constructor
+  Color get drawColor => fillColor.darker();
+  int _showNumber = NUMBERS_DANCERS;
+  bool showColor = true;
+  bool showShape = true;
+  bool hidden = false;
+  bool showPath = false;
+  bool isSelected = false;
+  fm.Path? _pathPath;
+  var _span = fm.TextSpan();
+  var _tp = fm.TextPainter();
+  var name = '';  // for sequencer
+
   static final _boyNames = ['Adam','Brad','Carl','David',
     'Eric','Frank',
     'Gary','Hank',
@@ -466,6 +483,71 @@ class Dancer implements Comparable<Dancer>, Cloneable<Dancer> {
     starttx = starttx * Matrix.getRotation(angle.toRadians);
     tx = starttx.clone();
     return this;
+  }
+
+  //  Draw the Dancer at its current position
+  //  The Canvas is already transformed to the Dancer's position and orientation
+  //  and scaled to the Dancer's size
+  void draw(fm.Canvas c) {
+    var dc = showColor ? drawColor : Color.GRAY;
+    var fc = showColor ? fillColor : Color.LIGHTGREY;
+    c.save();
+    //ctx.transform(d.tx);  not available on Flutter
+    c.translate(location.x,location.y);
+    c.rotate(tx.angle);
+    //  Draw the head
+    var p = fm.Paint()..color = dc;
+    c.drawCircle(fm.Offset(0.5,0.0), 0.33, p);
+
+    if (isSelected) {
+      var pHighlight = fm.Paint()
+        ..color = Color.WHITE
+        ..style = fm.PaintingStyle.stroke
+        ..strokeWidth = 0.15;
+      var g = showShape ? gender : Gender.PHANTOM;
+      if (g == Gender.BOY)
+        c.drawRect(rect.inflate(0.1), pHighlight);
+      else if (g == Gender.GIRL)
+        c.drawCircle(fm.Offset(0,0), 0.6, pHighlight);
+      else
+        c.drawRRect(rrect.inflate(0.1), pHighlight);
+    }
+    //  Draw the body
+    final reallyShowNumbers =
+        showNumber != NUMBERS_OFF &&
+        gender != Gender.PHANTOM &&
+        fillColor != Color.GRAY;
+    p.color = reallyShowNumbers ? fc.veryBright() : fc;
+    var g = showShape ? gender : Gender.PHANTOM;
+    if (g == Gender.BOY)
+      c.drawRect(rect, p);
+    else if (g == Gender.GIRL)
+      c.drawCircle(fm.Offset(0,0), 0.5, p);
+    else
+      c.drawRRect(rrect, p);
+    //  Draw the body outline
+    p.strokeWidth = 0.1;
+    p.color = dc;
+    p.style = fm.PaintingStyle.stroke;
+    if (g == Gender.BOY)
+      c.drawRect(rect, p);
+    else if (g == Gender.GIRL)
+      c.drawCircle(fm.Offset(0,0), 0.5, p);
+    else
+      c.drawRRect(rrect, p);
+    //  Draw number if on
+    if (reallyShowNumbers) {
+      //  The Dancer is rotated relative to the display, but of course
+      //  the Dancer number should not be rotated.
+      //  So the number needs to be transformed back
+      var angle = atan2(tx.m12,tx.m22);
+      var txtext = Matrix.getRotation(-angle + pi/2);
+      c.translate(txtext.location.x,txtext.location.y);
+      c.rotate(txtext.angle);
+      c.scale(-0.1,0.1);
+      _tp.paint(c, Offset(-_tp.width/2,-_tp.height/2));
+    }
+    c.restore();
   }
 
 }

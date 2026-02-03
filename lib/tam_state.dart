@@ -46,7 +46,8 @@ enum DetailPage {
   SETTINGS,
   DEFINITION,
   HELP,
-  ABBREVIATIONS
+  ABBREVIATIONS,
+  FREEPLAY
 }
 extension DetailPageEx on String {
   DetailPage toDetailPage() => DetailPage.values.firstWhere((d) => d.name == this);
@@ -79,6 +80,7 @@ class TamState extends fm.ChangeNotifier {
   String? formation;
   String? calls;
   String? helplink;
+  bool freeplay = false;
   @override
   bool operator ==(Object other) =>
       (other is TamState)
@@ -99,14 +101,15 @@ class TamState extends fm.ChangeNotifier {
     this.definition = false,
     this.axes = 'None',
     this.formation,
-    this.calls
+    this.calls,
+    this.freeplay = false,
   }) : _level=level, _link=link, _animnum=animnum, _animname=animname,
         _mainPage=mainPage, _detailPage=detailPage;
 
   void change({String? level, String? link, int? animnum, String? animname,
     MainPage? mainPage, DetailPage? detailPage,
     bool? embed, bool? play, bool? loop, bool? grid, bool? definition, String? axes,
-    String? formation, String? calls, String? helplink}) {
+    String? formation, String? calls, String? helplink, bool? freeplay}) {
     final before = toString();
     final params = Uri.parse(link ?? '').queryParameters;
     _level = level ?? _level;
@@ -132,6 +135,7 @@ class TamState extends fm.ChangeNotifier {
     this.formation = formation ?? this.formation;
     this.calls = calls ?? this.calls;
     this.helplink = helplink ?? this.helplink;
+    this.freeplay = freeplay ?? this.freeplay;
     if (toString() != before)
       notifyListeners();
   }
@@ -157,7 +161,8 @@ class TamState extends fm.ChangeNotifier {
     if (calls != null && calls!.isNotBlank)
       'calls=$calls',
     if (helplink != null && helplink!.isNotBlank)
-      'helplink=$helplink'
+      'helplink=$helplink',
+    if (freeplay) 'freeplay'
   ].join('&');
 
   bool get isBlank => toString().isBlank;
