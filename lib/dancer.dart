@@ -42,6 +42,7 @@ class Dancer extends DancerModel {
   bool showShape = true;
   bool hidden = false;
   bool showPath = false;
+  bool isSelected = false;
   fm.Path? _pathPath;
   var _span = fm.TextSpan();
   var _tp = fm.TextPainter();
@@ -160,6 +161,20 @@ class Dancer extends DancerModel {
     //  Draw the head
     var p = fm.Paint()..color = dc;
     c.drawCircle(fm.Offset(0.5,0.0), 0.33, p);
+
+    if (isSelected) {
+      var pHighlight = fm.Paint()
+        ..color = Color.WHITE
+        ..style = fm.PaintingStyle.stroke
+        ..strokeWidth = 0.15;
+      var g = showShape ? gender : Gender.PHANTOM;
+      if (g == Gender.BOY)
+        c.drawRect(rect.inflate(0.1), pHighlight);
+      else if (g == Gender.GIRL)
+        c.drawCircle(fm.Offset(0,0), 0.6, pHighlight);
+      else
+        c.drawRRect(rrect.inflate(0.1), pHighlight);
+    }
     //  Draw the body
     final reallyShowNumbers =
         showNumber != NUMBERS_OFF &&

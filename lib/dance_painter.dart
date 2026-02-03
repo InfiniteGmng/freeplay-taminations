@@ -267,6 +267,7 @@ class DancePainter extends fm.CustomPainter  {
 
     //  Draw dancers
     model.dancers.where((d) => !d.hidden).forEach((d) {
+      d.isSelected = (d == model.selectedDancer);
       d.draw(ctx);
     });
     ctx.restore();

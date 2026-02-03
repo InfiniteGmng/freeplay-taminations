@@ -300,12 +300,49 @@ class _AnimationFrameState extends fm.State<AnimationFrame>
                             onTap: () {
                               if (dancerTapped != null) {
                                 setState(() {
+                                  if (danceModel.selectedDancer == dancerTapped) {
+                                    danceModel.selectedDancer = null;
+                                  } else {
+                                    danceModel.selectedDancer = dancerTapped;
+                                  }
                                   danceModel.togglePath(dancerTapped!);
                                 });
                               }
                             },
                             onLongPress: longPressHandler,
                             onSecondaryTap: longPressHandler,
+                            onPanStart: (fg.DragStartDetails details) {
+                              if (appState.freeplay) {
+                                tapDownHandler(fm.TapDownDetails(
+                                  globalPosition: details.globalPosition,
+                                  localPosition: details.localPosition,
+                                  kind: fg.PointerDeviceKind.touch,
+                                ));
+                                setState(() {
+                                  danceModel.selectedDancer = dancerTapped;
+                                });
+                              }
+                            },
+                            onPanUpdate: (fg.DragUpdateDetails details) {
+                              if (appState.freeplay && dancerTapped != null) {
+                                setState(() {
+                                  var floorPos = painter.mouse2dance(details.localPosition.v);
+                                  dancerTapped!.setStartPosition(floorPos);
+                                  danceModel.notifyListeners();
+                                });
+                              }
+                            },
+                            onPanEnd: (fg.DragEndDetails details) {
+                              if (appState.freeplay && dancerTapped != null) {
+                                setState(() {
+                                  var loc = dancerTapped!.location;
+                                  var snapped = Vector(loc.x.roundToDouble(), loc.y.roundToDouble());
+                                  dancerTapped!.setStartPosition(snapped);
+                                  danceModel.notifyListeners();
+                                  dancerTapped = null;
+                                });
+                              }
+                            },
                             //  Stack to show info on animation
                             child: fm.Stack(
                                 children: [

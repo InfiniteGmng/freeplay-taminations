@@ -68,6 +68,15 @@ class DanceModel extends fm.ChangeNotifier {
   final _asymmetric = false;
   var _randomColors = false;
   var _practiceScore = 0.0;
+  Dancer? _selectedDancer;
+  Dancer? get selectedDancer => _selectedDancer;
+  set selectedDancer(Dancer? d) {
+    if (_selectedDancer != d) {
+      _selectedDancer = d;
+      notifyListeners();
+    }
+  }
+  var asCouples = false;
   String get animationNote => (_call?.taminator ?? '').replaceAll(r'\s+'.r, ' ');
   String get title => _call?.title ?? '';
   final fm.GlobalKey keyForImageCopy = fm.GlobalKey();
@@ -201,6 +210,13 @@ class DanceModel extends fm.ChangeNotifier {
   void setShapes(bool value) {
     for (final d in dancers)
       d.showShape = value;
+  }
+
+  void rotateSelectedDancer(double angle) {
+    if (_selectedDancer != null) {
+      _selectedDancer!.rotateStartAngle(angle);
+      notifyListeners();
+    }
   }
 
   void setSpeed(String speed) {
