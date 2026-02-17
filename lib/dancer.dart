@@ -40,6 +40,8 @@
 
 import 'dart:math';
 
+import 'package:flutter/material.dart' as fm;
+
 import 'cloneable.dart';
 import 'color.dart';
 import 'extensions.dart';
@@ -201,19 +203,10 @@ class Dancer implements Comparable<Dancer>, Cloneable<Dancer> {
   static const rect = fm.Rect.fromLTWH(-0.5, -0.5, 1.0, 1.0);
   static var rrect = fm.RRect.fromRectAndRadius(rect,
       fm.Radius.circular(0.3));
-  Geometry geometry;
-  Color fillColor;  //  Passed into default constructor
-  Color get drawColor => fillColor.darker();
-  int _showNumber = NUMBERS_DANCERS;
-  bool showColor = true;
-  bool showShape = true;
-  bool hidden = false;
-  bool showPath = false;
+
   bool isSelected = false;
-  fm.Path? _pathPath;
-  var _span = fm.TextSpan();
-  var _tp = fm.TextPainter();
-  var name = '';  // for sequencer
+  final _tp = fm.TextPainter();
+
 
   static final _boyNames = ['Adam','Brad','Carl','David',
     'Eric','Frank',
@@ -545,7 +538,7 @@ class Dancer implements Comparable<Dancer>, Cloneable<Dancer> {
       c.translate(txtext.location.x,txtext.location.y);
       c.rotate(txtext.angle);
       c.scale(-0.1,0.1);
-      _tp.paint(c, Offset(-_tp.width/2,-_tp.height/2));
+      _tp.paint(c, fm.Offset(-_tp.width/2,-_tp.height/2));
     }
     c.restore();
   }
