@@ -223,8 +223,61 @@ class DanceModel extends fm.ChangeNotifier {
       d.showShape = value;
   }
 
+  bool _halfStepMode = false;
+  bool get halfStepMode => _halfStepMode;
+  set halfStepMode(bool value) {
+    if (_halfStepMode != value) {
+      _halfStepMode = value;
+      notifyListeners();
+    }
+  }
+
+  void moveSelectedDancer(double dx, double dy) {
+    if (_selectedDancer != null) {
+      // Rotate the movement vector by the dancer's facing angle? 
+      // User said "move the selected dancer in that direction, in the NW, N..."
+      // Usually "North" means "Up on screen" (standard map/grid).
+      // If it meant "Forward relative to dancer", user would say "Forward/Back/Left/Right".
+      // "N, S, E, W" implies absolute floor alignment.
+      // So no rotation needed.
+      
+      var moveX = dx;
+      var moveY = dy;
+      
+      // Update dancer position
+      // `Dancer` has `setStartPosition` (absolute).
+      // `Dancer` has `starttx` field (Matrix).
+      
+      var currentPos = _selectedDancer!.starttx.location;
+      var newPos = Vector(currentPos.x + moveX, currentPos.y + moveY);
+      _selectedDancer!.setStartPosition(newPos);
+      notifyListeners();
+    }
+  }
+
   void rotateSelectedDancer(double angle) {
     if (_selectedDancer != null) {
+      // If halfStepMode is true, angle should be halved?
+      // User said: "The half toggle button should also effect the facing buttons."
+      // UI button "Face Left" calls this with 90.
+      // If halfStepMode, we should use 45.
+      // But `angle` argument comes from UI.
+      // I can either change UI to pass 45, OR change Model to check halfStepMode.
+      // Plan said: "Update Face Left/Right to use 45 degrees if danceModel.halfStepMode is true." (Implies UI change OR Model logic).
+      // If I change it here, `rotateSelectedDancer` becomes "rotate by step".
+      // But argument is `angle`.
+      // If I ignore argument and use fixed, that's confusing.
+      // Better to have UI decide the angle based on halfStepMode.
+      // So I will NOT modify rotateSelectedDancer logic to ignore angle, 
+      // but I WILL modify it to maybe taking a "direction" instead?
+      // No, keep `rotateSelectedDancer(double angle)` as generic.
+      
+      // Wait, user said "face left and right buttons because the arrow keys should keep the dancer facing...".
+      // "The half toggle button should also effect the facing buttons."
+      
+      // I will implement helper getter for rotationStep?
+      // Or just let UI access `halfStepMode`.
+      
       _selectedDancer!.rotateStartAngle(angle);
       notifyListeners();
     }
