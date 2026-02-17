@@ -1,0 +1,6 @@
+Analyzing Taminations...                                        
+
+  error - Undefined name '_asCouples' - lib\dance_model.dart:238:11 - undefined_identifier
+  error - Undefined name '_asCouples' - lib\dance_model.dart:261:11 - undefined_identifier
+   info - The member 'build' overrides an inherited member but isn't annotated with '@override' - lib\sequencer\freeplay_directions_frame.dart:30:13 - annotate_overrides
+

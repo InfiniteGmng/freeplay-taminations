@@ -29,29 +29,33 @@ class FreeplayDirectionsFrame extends fm.StatelessWidget {
 
   @override
   fm.Widget build(fm.BuildContext context) {
-    return pp.Consumer<DanceModel>(
-      builder: (context, danceModel, _) {
-        return fm.Container(
-          color: Color.LIGHTGRAY,
-          child: fm.ListView(
+    return fm.Material(
+      color: Color.LIGHTGRAY,
+      child: pp.Consumer<DanceModel>(
+        builder: (context, danceModel, _) {
+          return fm.ListView(
             children: [
-              // Directional Grid
+              // Directional Grid (Axis mapping for Taminations)
               fm.Container(
                 color: Color.WHITE,
                 padding: fm.EdgeInsets.all(8),
                 margin: fm.EdgeInsets.only(bottom: 3),
                 child: fm.Column(
                   children: [
-                    _buildRow(danceModel, [-1, -1], [0, -1], [1, -1],
+                    // North is +X, West is +Y.
+                    // NW: dx=1, dy=1 | N: dx=1, dy=0 | NE: dx=1, dy=-1
+                    _buildRow(danceModel, [1, 1], [1, 0], [1, -1],
                         fm.Icons.north_west, fm.Icons.north, fm.Icons.north_east),
                     fm.Row(
                       children: [
-                        _dirButton(danceModel, -1, 0, fm.Icons.west),
+                        // W: dx=0, dy=1 | E: dx=0, dy=-1
+                        _dirButton(danceModel, 0, 1, fm.Icons.west),
                         _toggleButton(danceModel),
-                        _dirButton(danceModel, 1, 0, fm.Icons.east),
+                        _dirButton(danceModel, 0, -1, fm.Icons.east),
                       ],
                     ),
-                    _buildRow(danceModel, [-1, 1], [0, 1], [1, 1],
+                    // SW: dx=-1, dy=1 | S: dx=-1, dy=0 | SE: dx=-1, dy=-1
+                    _buildRow(danceModel, [-1, 1], [-1, 0], [-1, -1],
                         fm.Icons.south_west, fm.Icons.south, fm.Icons.south_east),
                   ],
                 ),
@@ -126,9 +130,9 @@ class FreeplayDirectionsFrame extends fm.StatelessWidget {
                   ),
                 ),
             ],
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 

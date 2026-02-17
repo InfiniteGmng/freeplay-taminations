@@ -41,6 +41,7 @@ class DancePainter extends fm.CustomPainter  {
   DanceModel model;
 
   Vector _size = Vector();
+  set size(Vector s) => _size = s;
   var leadin = 2.0;
   var leadout = 2.0;
   var _prevbeat = 0.0;

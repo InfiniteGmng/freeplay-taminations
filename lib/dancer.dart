@@ -533,11 +533,25 @@ class Dancer implements Comparable<Dancer>, Cloneable<Dancer> {
       //  The Dancer is rotated relative to the display, but of course
       //  the Dancer number should not be rotated.
       //  So the number needs to be transformed back
+      var t = gender == Gender.PHANTOM ? '?' :
+      showNumber == NUMBERS_DANCERS ? number :
+      showNumber == NUMBERS_COUPLES ? numberCouple : gender.s;
+
+      final span = fm.TextSpan(
+          text: t,
+          style: fm.TextStyle(
+              color: fm.Colors.black,
+              fontSize: NUMBER_HEIGHT,
+              fontWeight: fm.FontWeight.normal));
+      _tp.text = span;
+      _tp.textDirection = fm.TextDirection.ltr;
+      _tp.layout();
+
       var angle = atan2(tx.m12,tx.m22);
       var txtext = Matrix.getRotation(-angle + pi/2);
       c.translate(txtext.location.x,txtext.location.y);
       c.rotate(txtext.angle);
-      c.scale(-0.1,0.1);
+      c.scale(-0.1,0.1); // Revert to negative scale to correct mirroring in Taminations coordinate system
       _tp.paint(c, fm.Offset(-_tp.width/2,-_tp.height/2));
     }
     c.restore();

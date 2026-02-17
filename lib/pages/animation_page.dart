@@ -239,9 +239,10 @@ class _AnimationFrameState extends fm.State<AnimationFrame>
           });
           return fm.Column(children: [
                 //  Dance area with animations
-                fm.Expanded(child: pp.Consumer2<Settings,SequencerModel>(
-                    builder: (context, settings, sequencerModel, child) {
+                fm.Expanded(child: pp.Consumer3<Settings,SequencerModel,DanceModel>(
+                    builder: (context, settings, sequencerModel, danceModel, child) {
                       final painter = DancePainter(danceModel);
+                      painter.size = Vector(constraints.maxWidth, constraints.maxHeight);
                       //  Send current settings to the dance model
                       danceModel.gridVisibility = Settings.grid || appState.grid;
                       danceModel.axesVisibility = Settings.axes;
@@ -375,7 +376,7 @@ class _AnimationFrameState extends fm.State<AnimationFrame>
                                       child: fm.Center(), // so CustomPaint gets sized correctly
                                     ),
                                     //  Note that fades out as animation starts
-                                    _Note(),
+                                    fm.IgnorePointer(child: _Note()),
                                     //  Info to show at bottom right
                                     //  Sequencer Beat, Speed, Looping
                                     fm.Positioned(
