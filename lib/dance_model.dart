@@ -82,6 +82,11 @@ class DanceModel extends fm.ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void parametersChanged() {
+    notifyListeners();
+  }
+
   var asCouples = false;
   String get animationNote => (_call?.taminator ?? '').replaceAll(r'\s+'.r, ' ');
   String get title => _call?.title ?? '';

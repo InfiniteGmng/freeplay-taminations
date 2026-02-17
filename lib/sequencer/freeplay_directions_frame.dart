@@ -63,7 +63,7 @@ class FreeplayDirectionsFrame extends fm.StatelessWidget {
                 child: fm.InkWell(
                   onTap: () {
                     danceModel.asCouples = !danceModel.asCouples;
-                    danceModel.notifyListeners();
+                    danceModel.parametersChanged();
                   },
                   child: fm.Row(
                     children: [
@@ -71,7 +71,7 @@ class FreeplayDirectionsFrame extends fm.StatelessWidget {
                         value: danceModel.asCouples,
                         onChanged: (value) {
                           danceModel.asCouples = value!;
-                          danceModel.notifyListeners();
+                          danceModel.parametersChanged();
                         },
                       ),
                       fm.Expanded(

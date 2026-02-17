@@ -23,6 +23,7 @@ import 'package:flutter/material.dart' as fm;
 import 'package:provider/provider.dart' as pp;
 
 import '../common_flutter.dart';
+import '../dance_model.dart';
 import '../pages/animation_page.dart';
 import 'sequence_frame.dart';
 import 'sequencer_model.dart';
@@ -123,6 +124,8 @@ class _SequencerHelpButton extends fm.StatelessWidget {
     return fm.Expanded(
         child: Button('Help',onPressed: () {
           appState.change(detailPage:DetailPage.HELP,helplink: 'info/sequencer');
+          final danceModel = pp.Provider.of<DanceModel>(context,listen: false);
+          danceModel.selectedDancer = null;
         },)
     );
   }
@@ -135,6 +138,8 @@ class _SequencerSettingsButton extends fm.StatelessWidget {
     return fm.Expanded(
         child: Button('Settings',onPressed: () {
           appState.change(detailPage:DetailPage.SETTINGS);
+          final danceModel = pp.Provider.of<DanceModel>(context,listen: false);
+          danceModel.selectedDancer = null;
         },)
     );
   }
@@ -147,6 +152,8 @@ class _SequencerAbbrevButton extends fm.StatelessWidget {
     return fm.Expanded(
         child: Button('Abbrev',onPressed: () {
           appState.change(detailPage:DetailPage.ABBREVIATIONS);
+          final danceModel = pp.Provider.of<DanceModel>(context,listen: false);
+          danceModel.selectedDancer = null;
         },)
     );
   }
@@ -163,6 +170,8 @@ class _SequencerCallsButton extends fm.StatelessWidget {
               grid: false,
               detailPage: DetailPage.CALLS
           );
+          final danceModel = pp.Provider.of<DanceModel>(context,listen: false);
+          danceModel.selectedDancer = null;
         },)
     );
   }

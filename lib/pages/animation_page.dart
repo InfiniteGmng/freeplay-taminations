@@ -349,7 +349,7 @@ class _AnimationFrameState extends fm.State<AnimationFrame>
                                 setState(() {
                                   var floorPos = painter.mouse2dance(details.localPosition.v);
                                   dancerTapped!.setStartPosition(floorPos);
-                                  danceModel.notifyListeners();
+                                  danceModel.parametersChanged();
                                 });
                               }
                             },
@@ -359,7 +359,7 @@ class _AnimationFrameState extends fm.State<AnimationFrame>
                                   var loc = dancerTapped!.location;
                                   var snapped = Vector(loc.x.roundToDouble(), loc.y.roundToDouble());
                                   dancerTapped!.setStartPosition(snapped);
-                                  danceModel.notifyListeners();
+                                  danceModel.parametersChanged();
                                   dancerTapped = null;
                                 });
                               }
